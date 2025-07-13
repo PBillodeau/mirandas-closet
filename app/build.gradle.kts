@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.release
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,8 +21,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("mc.jks")
+            storePassword = System.getenv("MC_SIGNING_STORE_PASSWORD")
+            keyAlias = System.getenv("MC_SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("MC_SIGNING_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -67,6 +79,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }
+
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
 }
