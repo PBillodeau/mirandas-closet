@@ -31,3 +31,14 @@ jobs:
         run: chmod +x ./gradlew
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Find APK path
+        id: apk_path
+        run: |
+          APK_PATH=$(find $PWD -type f -name "*.apk" | grep release | head -n 1)
+          echo "apk_path=${APK_PATH}" >> $GITHUB_OUTPUT
+      - name: Create Release and Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.apk_path.outputs.apk_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
