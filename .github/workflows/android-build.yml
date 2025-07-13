@@ -40,4 +40,4 @@ jobs:
         with:
           files: ${{ steps.apk_path.outputs.apk_path }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MC_RELEASE }}
