@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                                 startActivity(intent)
                             }
                         ) {
-                            Icon(Icons.Default.Add, contentDescription = "Add Photo")
+                            Icon(Icons.Default.Add, tint = MaterialTheme.colorScheme.primary, contentDescription = "Add Photo")
                         }
                     }
                 ) { innerPadding ->

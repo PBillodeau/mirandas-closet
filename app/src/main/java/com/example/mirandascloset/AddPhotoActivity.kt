@@ -95,7 +95,7 @@ fun AddPhotoScreen(onBack: () -> Unit) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
-                        .background(Color(0xFFEEEEEE), RoundedCornerShape(8.dp))
+                        .background(Color(0xFFDFDFDF), RoundedCornerShape(8.dp))
                         .clickable {
                             val activity = context as Activity
 
@@ -118,7 +118,7 @@ fun AddPhotoScreen(onBack: () -> Unit) {
                         Icon(
                             imageVector = Icons.Default.AddCircle,
                             contentDescription = "Add picture",
-                            tint = Color.Gray,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(64.dp),
                         )
                     }
@@ -145,9 +145,10 @@ fun AddPhotoScreen(onBack: () -> Unit) {
                             }
                         }
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Save")
+                    Text("Save", modifier = Modifier.padding(8.dp))
                 }
             }
         }

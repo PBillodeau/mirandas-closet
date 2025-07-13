@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.example.mirandascloset.data.*
 import com.example.mirandascloset.ui.theme.MirandasClosetTheme
 import kotlinx.coroutines.CoroutineScope
@@ -56,11 +58,52 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
     val imageDao = db.imageDao()
     var imageWithTags by remember { mutableStateOf<ImageWithTags?>(null) }
     var tags by remember { mutableStateOf("") }
+    val openAlertDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(imageId) {
         launch(Dispatchers.IO) {
             imageWithTags = imageDao.getImageById(imageId)
             tags = imageWithTags?.tags?.joinToString(", ") { it.name } ?: ""
+        }
+    }
+    when { openAlertDialog.value -> {
+        BasicAlertDialog(
+            onDismissRequest = { openAlertDialog.value = false },
+            properties = DialogProperties(), content = {
+                Surface(
+                    modifier = Modifier.wrapContentWidth().wrapContentHeight(),
+                    shape = MaterialTheme.shapes.large
+                ) {
+                    Column(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 0.dp)) {
+                        Text("Are you sure you want to delete this photo?")
+                        Row(modifier = Modifier.padding(16.dp).align(Alignment.End)) {
+                            TextButton (
+                                onClick = {
+                                    openAlertDialog.value = false
+                                }
+                            ) {
+                                Text("Cancel")
+                            }
+                            Button(
+                                onClick = {
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        imageWithTags?.let { iwt ->
+                                            imageDao.deleteImage(imageWithTags!!)
+                                            launch(Dispatchers.Main) {
+                                                Toast.makeText(context, "Image deleted", Toast.LENGTH_SHORT).show()
+                                                onBack()
+                                            }
+                                        }
+                                    }
+                                },
+                                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.primary)
+                            ) {
+                                Text("Confirm")
+                            }
+                        }
+                    }
+                }
+            })
         }
     }
 
@@ -80,15 +123,7 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
                 actions = {
                     IconButton(
                         onClick = {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                imageWithTags?.let { iwt ->
-                                    imageDao.deleteImage(imageWithTags!!)
-                                    launch(Dispatchers.Main) {
-                                        Toast.makeText(context, "Image deleted", Toast.LENGTH_SHORT).show()
-                                        onBack()
-                                    }
-                                }
-                            }
+                            openAlertDialog.value = true
                         }
                     ) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete Image")
@@ -142,9 +177,10 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
                                 }
                             }
                         },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.primary)
                     ) {
-                        Text("Save")
+                        Text("Save", modifier = Modifier.padding(8.dp))
                     }
                 }
             }
