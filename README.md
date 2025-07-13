@@ -18,7 +18,7 @@
 <!-- You can replace these links with your own screenshots -->
 ![homepage](screenshots/home.png)
 ![add image](screenshots/add.png)
-![add tags](screenshots/tags.png)
+![add tags](screenshots/tag.png)
 
 ## Getting Started
 
