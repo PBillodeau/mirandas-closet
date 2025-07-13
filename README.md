@@ -15,10 +15,8 @@
 
 ## Screenshots
 
-<!-- You can replace these links with your own screenshots -->
-![homepage](screenshots/home.png)
-![add image](screenshots/add.png)
-![add tags](screenshots/tag.png)
+![homepage](screenshots/home.png =20%x) ![add image](screenshots/add.png =20%x) ![add tags](screenshots/tag.png =20%x)
+
 
 ## Getting Started
 
