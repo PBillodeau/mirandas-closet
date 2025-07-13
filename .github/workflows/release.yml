@@ -18,7 +18,7 @@ jobs:
       - uses: gradle/gradle-build-action@v2
 
       - name: Decode keystore
-        run: echo "${{ secrets.MC_KEYSTORE }}" | base64 --decode > mc.jks
+        run: echo "${{ secrets.MC_KEYSTORE }}" | base64 --decode > app/mc.jks
 
       - name: Build release apk
         run: ./gradlew assembleRelease
