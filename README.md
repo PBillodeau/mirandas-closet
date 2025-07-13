@@ -15,8 +15,16 @@
 
 ## Screenshots
 
-![homepage](screenshots/home.png =20%x) ![add image](screenshots/add.png =20%x) ![add tags](screenshots/tag.png =20%x)
+<table>
+  <tbody>
+    <tr>
+        <td><img src="screenshots/add.png" width="300"></td>
+        <td><img src="screenshots/tag.png" width="300""></td>
+        <td><img src="screenshots/home.png" width="300"></td>
+    </tr>
+  </tbody>
 
+</table>
 
 ## Getting Started
 
