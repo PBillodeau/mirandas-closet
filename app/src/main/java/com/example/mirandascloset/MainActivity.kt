@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +34,7 @@ import com.example.mirandascloset.ui.theme.MirandasClosetTheme
 import java.io.File
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 
 
 class MainActivity : ComponentActivity() {
@@ -41,14 +43,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MirandasClosetTheme {
-                val db = AppDatabase.getInstance(this)
+                val context = LocalContext.current
+                val db = remember { AppDatabase.getInstance(context) }
                 val imageDao = db.imageDao()
                 val imagesWithTagsFlow = imageDao.getAllImages()
                 val tagsWithImagesFlow = imageDao.getAllTagsWithImages()
                 val imagesWithTags by imagesWithTagsFlow.collectAsState(initial = emptyList())
                 val tagsWithImages by tagsWithImagesFlow.collectAsState(initial = emptyList())
                 var selectedTag by remember { mutableStateOf<TagEntity?>(null) }
-                val context = this
 
                 Scaffold(
                     topBar = {
@@ -57,7 +59,17 @@ class MainActivity : ComponentActivity() {
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                                 titleContentColor = MaterialTheme.colorScheme.primary,
-                            )
+                            ),
+                            actions = {
+                                IconButton(
+                                    onClick = {
+                                        val intent = Intent(context, ImportImagesActivity::class.java)
+                                        startActivity(intent)
+                                    }
+                                ) {
+                                    Icon(Icons.Default.AccountBox, contentDescription = "Import")
+                                }
+                            }
                         )
                     },
                     floatingActionButton = {

@@ -12,7 +12,8 @@ private val DarkColorScheme = darkColorScheme(
     primaryContainer = Purple40,
     secondary = Color(0xFFFFFFFF),
     tertiary = Tan,
-    background = Color(0xFF000000)
+    background = Color(0xFF000000),
+    surface = Color(0xFFEEEEEE)
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -20,7 +21,8 @@ private val LightColorScheme = lightColorScheme(
     primaryContainer = Tan,
     secondary = Brown,
     tertiary = Tan,
-    background = Color(0xFFEEEEEE)
+    background = Color(0xFFEEEEEE),
+    surface = Color(0xFFEEEEEE)
 )
 
 @Composable
