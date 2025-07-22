@@ -55,7 +55,7 @@ class AddPhotoActivity : ComponentActivity() {
 fun AddPhotoScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val db = remember { AppDatabase.getInstance(context) }
-    val imageDao = db.imageDao()
+    val imageDao = remember { db.imageDao() }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var tags by remember { mutableStateOf("") }
 

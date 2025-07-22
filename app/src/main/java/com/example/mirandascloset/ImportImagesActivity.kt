@@ -50,7 +50,7 @@ fun ImportImagesScreen(
 ) {
     val context = LocalContext.current
     val db = remember { AppDatabase.getInstance(context) }
-    val imageDao = db.imageDao()
+    val imageDao = remember { db.imageDao() }
     var importedUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
     val scope = rememberCoroutineScope()
 

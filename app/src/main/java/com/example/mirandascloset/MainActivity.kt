@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
             MirandasClosetTheme {
                 val context = LocalContext.current
                 val db = remember { AppDatabase.getInstance(context) }
-                val imageDao = db.imageDao()
+                val imageDao = remember { db.imageDao() }
                 val imagesWithTagsFlow = imageDao.getAllImages()
                 val tagsWithImagesFlow = imageDao.getAllTagsWithImages()
                 val imagesWithTags by imagesWithTagsFlow.collectAsState(initial = emptyList())

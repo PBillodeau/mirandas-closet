@@ -55,7 +55,7 @@ class EditImageActivity : ComponentActivity() {
 fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
     val context = LocalContext.current
     val db = remember { AppDatabase.getInstance(context) }
-    val imageDao = db.imageDao()
+    val imageDao = remember { db.imageDao() }
     var imageWithTags by remember { mutableStateOf<ImageWithTags?>(null) }
     var tags by remember { mutableStateOf("") }
     val openAlertDialog = remember { mutableStateOf(false) }
