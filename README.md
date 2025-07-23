@@ -18,9 +18,9 @@
 <table>
   <tbody>
     <tr>
-        <td><img src="screenshots/add.png" width="300"></td>
-        <td><img src="screenshots/tag.png" width="300""></td>
-        <td><img src="screenshots/home.png" width="300"></td>
+        <td><img src="screenshots/add.png" width="429"></td>
+        <td><img src="screenshots/tag.png" width="425"></td>
+        <td><img src="screenshots/home.png" width="426"></td>
     </tr>
   </tbody>
 

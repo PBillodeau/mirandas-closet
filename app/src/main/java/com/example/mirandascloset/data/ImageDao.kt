@@ -24,10 +24,6 @@ interface ImageDao {
     fun getAllImages(): Flow<List<ImageWithTags>>
 
     @Transaction
-    @Query("SELECT * FROM tags ORDER BY name ASC")
-    suspend fun getAllTags(): List<TagEntity>
-
-    @Transaction
     @Query("SELECT * FROM images WHERE imageId = :imageId")
     suspend fun getImageById(imageId: Long): ImageWithTags?
 
@@ -41,9 +37,6 @@ interface ImageDao {
 
     @Query("DELETE FROM ImageTagCrossRef WHERE imageId = :imageId")
     suspend fun deleteImageTags(imageId: Long)
-
-    @Query("DELETE FROM tags WHERE tagId = :tagId")
-    suspend fun deleteTagById(tagId: Long)
 
     @Query("DELETE FROM images WHERE imageId = :imageId")
     suspend fun deleteImageById(imageId: Long)
