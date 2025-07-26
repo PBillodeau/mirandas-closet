@@ -52,7 +52,7 @@ interface ImageDao {
         val filename = "IMG_${UUID.randomUUID()}.jpg"
         val file = File(context.filesDir, filename)
         FileOutputStream(file).use { out ->
-            photoBitmap.compress(Bitmap.CompressFormat.JPEG, 95, out)
+            photoBitmap.compress(Bitmap.CompressFormat.JPEG, 75, out)
         }
 
         val imageId = this.insertImage(ImageEntity(filePath = file.absolutePath))
