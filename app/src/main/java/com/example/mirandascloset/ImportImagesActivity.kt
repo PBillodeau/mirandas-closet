@@ -104,10 +104,10 @@ fun ImportImagesScreen(
                     }
 
                     EditImageView(null, bitmap, null, context, imageDao, onBack = {
-                        if (current > importedUris.count()) {
-                            onBack()
-                        } else {
+                        if (importedUris.indices.contains(current + 1)) {
                             current += 1
+                        } else {
+                            onBack()
                         }
                     })
                 }
