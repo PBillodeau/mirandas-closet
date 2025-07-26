@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,18 +23,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 import com.example.mirandascloset.data.AppDatabase
-import com.example.mirandascloset.data.ImageWithTags
 import com.example.mirandascloset.data.TagEntity
 import com.example.mirandascloset.ui.theme.MirandasClosetTheme
-import java.io.File
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-
+import com.example.mirandascloset.data.ImageWithTags
+import java.io.File
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -110,7 +109,7 @@ class MainActivity : ComponentActivity() {
                                     imgWithTags.tags.any { it.tagId == selectedTag?.tagId }
                                 }
                             }
-                            ImageGrid(
+                            ImageGridView(
                                 images = filteredImages,
                                 modifier = Modifier.weight(1f),
                                 onImageClick = { imageWithTags ->
@@ -122,6 +121,57 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun ImageGridView(images: List<ImageWithTags>, modifier: Modifier = Modifier, onImageClick: (ImageWithTags) -> Unit) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(150.dp),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(images.size) { image ->
+            Box(modifier = Modifier.clickable { onImageClick(images[image]) }) {
+                ImageListItem(images[image])
+            }
+        }
+    }
+}
+
+@Composable
+fun ImageListItem(image: ImageWithTags) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
+            .padding(4.dp),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .background(Color.White)
+                .padding(0.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val imgFile = File(image.image.filePath)
+            if (imgFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+                if (bitmap != null) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = "Saved photo",
+                        modifier = Modifier.fillMaxWidth(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+            image.tags.forEach { tag ->
+                Text (text = tag.name)
             }
         }
     }
@@ -171,59 +221,6 @@ fun TagDropdown(
                         onTagSelected(tag)
                         expanded = false
                     }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ImageGrid(images: List<ImageWithTags>, modifier: Modifier = Modifier, onImageClick: (ImageWithTags) -> Unit) {
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(images.size) { image ->
-            Box(modifier = Modifier.clickable { onImageClick(images[image]) }) {
-                ImageListItem(images[image])
-            }
-        }
-    }
-}
-
-@Composable
-fun ImageListItem(image: ImageWithTags) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .padding(4.dp),
-        shape = RoundedCornerShape(8.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .background(Color.White)
-                .padding(0.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val imgFile = File(image.image.filePath)
-            if (imgFile.exists()) {
-                val bitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
-                if (bitmap != null) {
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Saved photo",
-                        modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-            image.tags.forEach { tag ->
-                Text (
-                    text = tag.name,
                 )
             }
         }
