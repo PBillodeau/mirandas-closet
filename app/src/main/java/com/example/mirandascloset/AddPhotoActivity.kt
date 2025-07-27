@@ -46,15 +46,10 @@ fun AddPhotoScreen(onBack: () -> Unit) {
             photoBitmap = bitmap
         }
     }
-
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Add Photo") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -63,9 +58,8 @@ fun AddPhotoScreen(onBack: () -> Unit) {
             )
         }
     ) { innerPadding ->
-        Surface(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp),
-            color = MaterialTheme.colorScheme.background
+        Column(
+            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp)
         ) {
             EditImageView(null, photoBitmap, cameraLauncher, context, imageDao, onBack = { onBack() })
         }

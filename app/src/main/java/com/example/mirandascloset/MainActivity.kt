@@ -27,9 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.example.mirandascloset.data.AppDatabase
 import com.example.mirandascloset.data.TagEntity
 import com.example.mirandascloset.ui.theme.MirandasClosetTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -55,10 +53,6 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = { Text("Miranda's Closet") },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                                titleContentColor = MaterialTheme.colorScheme.primary,
-                            ),
                             actions = {
                                 IconButton(
                                     onClick = {
@@ -78,14 +72,12 @@ class MainActivity : ComponentActivity() {
                                 startActivity(intent)
                             }
                         ) {
-                            Icon(Icons.Default.Add, tint = MaterialTheme.colorScheme.primary, contentDescription = "Add Photo")
+                            Icon(Icons.Default.Add, contentDescription = "Add Photo")
                         }
                     }
                 ) { innerPadding ->
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
+                        modifier = Modifier.fillMaxSize().padding(innerPadding)
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
                         TagDropdown(
@@ -146,16 +138,11 @@ fun ImageGridView(images: List<ImageWithTags>, modifier: Modifier = Modifier, on
 @Composable
 fun ImageListItem(image: ImageWithTags) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .padding(4.dp),
+        modifier = Modifier.fillMaxWidth().aspectRatio(1f).padding(4.dp),
         shape = RoundedCornerShape(8.dp),
     ) {
         Column(
-            modifier = Modifier
-                .background(Color.White)
-                .padding(0.dp),
+            modifier = Modifier.padding(0.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val imgFile = File(image.image.filePath)
@@ -169,9 +156,6 @@ fun ImageListItem(image: ImageWithTags) {
                         contentScale = ContentScale.Crop
                     )
                 }
-            }
-            image.tags.forEach { tag ->
-                Text (text = tag.name)
             }
         }
     }
@@ -189,9 +173,7 @@ fun TagDropdown(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     ) {
         OutlinedTextField(
             value = selectedLabel,
@@ -199,9 +181,7 @@ fun TagDropdown(
             readOnly = true,
             label = { Text("Filter by tag") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = Modifier
-                .menuAnchor(MenuAnchorType.PrimaryEditable, true)
-                .fillMaxWidth()
+            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryEditable, true).fillMaxWidth()
         )
         ExposedDropdownMenu(
             expanded = expanded,

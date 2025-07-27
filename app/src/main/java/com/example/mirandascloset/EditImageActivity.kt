@@ -75,10 +75,6 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
         topBar = {
             TopAppBar(
                 title = { Text("Edit Image") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -92,9 +88,8 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
             )
         }
     ) { innerPadding ->
-        Surface(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp),
-            color = MaterialTheme.colorScheme.background
+        Column(
+            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(24.dp)
         ) {
             if (imageWithTags != null) {
                 val imgFile = File(imageWithTags!!.image.filePath)
@@ -142,8 +137,7 @@ fun DeleteConfirmation(
                                         }
                                     }
                                 }
-                            },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer, contentColor = MaterialTheme.colorScheme.primary)
+                            }
                         ) {
                             Text("Confirm")
                         }

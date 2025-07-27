@@ -57,10 +57,6 @@ fun ImportImagesScreen(
         topBar = {
             TopAppBar(
                 title = { Text("Import Images $tracker") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -69,48 +65,36 @@ fun ImportImagesScreen(
             )
         }
     ) { innerPadding ->
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(24.dp)
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(innerPadding).padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                if (importedUris.isEmpty()) {
-                    Spacer(
-                        modifier = Modifier.weight(1f)
-                            .background(MaterialTheme.colorScheme.background)
-                    )
-                    Button(
-                        onClick = {
-                            pickImagesLauncher.launch(arrayOf("image/*"))
-                        },
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            contentColor = MaterialTheme.colorScheme.primary
-                        )
-                    ) {
-                        Text("Select Images", modifier = Modifier.padding(8.dp))
-                    }
-                } else {
-                    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
-
-                    context.contentResolver.openInputStream(importedUris[current])?.use { input ->
-                        bitmap = BitmapFactory.decodeStream(input)
-                    }
-
-                    EditImageView(null, bitmap, null, context, imageDao, onBack = {
-                        if (importedUris.indices.contains(current + 1)) {
-                            current += 1
-                        } else {
-                            onBack()
-                        }
-                    })
+            if (importedUris.isEmpty()) {
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Button(
+                    onClick = {
+                        pickImagesLauncher.launch(arrayOf("image/*"))
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Select Images", modifier = Modifier.padding(8.dp))
                 }
+            } else {
+                var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+                context.contentResolver.openInputStream(importedUris[current])?.use { input ->
+                    bitmap = BitmapFactory.decodeStream(input)
+                }
+
+                EditImageView(null, bitmap, null, context, imageDao, onBack = {
+                    if (importedUris.indices.contains(current + 1)) {
+                        current += 1
+                    } else {
+                        onBack()
+                    }
+                })
             }
         }
     }
