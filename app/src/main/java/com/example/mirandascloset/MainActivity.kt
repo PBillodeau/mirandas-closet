@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,7 +14,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.DriveFolderUpload
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,7 +59,7 @@ class MainActivity : ComponentActivity() {
                                         startActivity(intent)
                                     }
                                 ) {
-                                    Icon(Icons.Default.AccountBox, contentDescription = "Import")
+                                    Icon(Icons.Default.DriveFolderUpload, contentDescription = "Import")
                                 }
                             }
                         )

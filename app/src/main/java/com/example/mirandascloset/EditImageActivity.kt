@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import com.example.mirandascloset.ui.views.EditImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class EditImageActivity : ComponentActivity() {
@@ -53,10 +55,12 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
     val imageDao = remember { db.imageDao() }
     var imageWithTags by remember { mutableStateOf<ImageWithTags?>(null) }
     val openAlertDialog = remember { mutableStateOf(false) }
+    var tags by remember { mutableStateOf("") }
 
     LaunchedEffect(imageId) {
         launch(Dispatchers.IO) {
             imageWithTags = imageDao.getImageById(imageId)
+            tags = imageWithTags?.tags?.joinToString(", ") { it.name } ?: ""
         }
     }
 
@@ -84,6 +88,19 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
                     IconButton(onClick = {openAlertDialog.value = true}) {
                         Icon(Icons.Default.Delete, contentDescription = "Delete Image")
                     }
+                    IconButton(
+                        onClick = {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                imageDao.updateImageTags(imageWithTags!!.image.imageId, tags)
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Saved!", Toast.LENGTH_SHORT).show()
+                                    onBack()
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(Icons.Default.Save, contentDescription = "Save")
+                    }
                 }
             )
         }
@@ -94,7 +111,7 @@ fun EditImageScreen(imageId: Long, onBack: () -> Unit) {
             if (imageWithTags != null) {
                 val imgFile = File(imageWithTags!!.image.filePath)
                 val bitmap = if (imgFile.exists()) BitmapFactory.decodeFile(imgFile.absolutePath) else null
-                EditImageView(imageWithTags, bitmap, null, context, imageDao, onBack={onBack()})
+                EditImageView(bitmap, null, context, tags) { value -> tags = value }
             }
         }
     }
