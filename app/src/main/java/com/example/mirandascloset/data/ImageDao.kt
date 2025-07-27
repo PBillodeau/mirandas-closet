@@ -2,6 +2,7 @@ package com.example.mirandascloset.data
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.core.graphics.scale
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -49,10 +50,15 @@ interface ImageDao {
     }
 
     suspend fun createImage(context: Context, photoBitmap: Bitmap, tags: String) {
+        val maxLength = 1024
+        val inWidth: Int = photoBitmap.getWidth()
+        val inHeight: Int = photoBitmap.getHeight()
+
         val filename = "IMG_${UUID.randomUUID()}.jpg"
         val file = File(context.filesDir, filename)
         FileOutputStream(file).use { out ->
-            photoBitmap.compress(Bitmap.CompressFormat.JPEG, 75, out)
+            val resizedBitmap = photoBitmap.scale(maxLength, (inHeight * maxLength) / inWidth, false)
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 75, out)
         }
 
         val imageId = this.insertImage(ImageEntity(filePath = file.absolutePath))
